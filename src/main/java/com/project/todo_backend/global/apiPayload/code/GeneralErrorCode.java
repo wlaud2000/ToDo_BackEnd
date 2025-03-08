@@ -23,7 +23,7 @@ public enum GeneralErrorCode implements BaseErrorCode{
     ;
 
     // 필요한 필드값 선언
-    private final HttpStatus status;
+    private final HttpStatus httpStatus;
     private final String code;
     private final String message;
 }

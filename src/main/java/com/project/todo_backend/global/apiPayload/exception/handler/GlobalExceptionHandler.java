@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
                 errors
         );
         // 에러 코드, 메시지와 함께 errors를 반환
-        return ResponseEntity.status(validationErrorCode.getStatus()).body(errorResponse);
+        return ResponseEntity.status(validationErrorCode.getHttpStatus()).body(errorResponse);
     }
 
     //애플리케이션에서 발생하는 커스텀 예외를 처리
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
         //예외가 발생하면 로그 기록
         log.warn("[ CustomException ]: {}", ex.getCode().getMessage());
         //커스텀 예외에 정의된 에러 코드와 메시지를 포함한 응답 제공
-        return ResponseEntity.status(ex.getCode().getStatus())
+        return ResponseEntity.status(ex.getCode().getHttpStatus())
                 .body(ex.getCode().getErrorResponse());
     }
 
@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
                 null
         );
         return ResponseEntity
-                .status(errorCode.getStatus())
+                .status(errorCode.getHttpStatus())
                 .body(errorResponse);
     }
 }

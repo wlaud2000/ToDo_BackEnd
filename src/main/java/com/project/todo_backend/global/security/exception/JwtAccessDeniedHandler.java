@@ -1,6 +1,6 @@
 package com.project.todo_backend.global.security.exception;
 
-import com.project.todo_backend.global.security.utils.HttpResponseUtil;
+import com.project.todo_backend.global.utils.HttpResponseUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

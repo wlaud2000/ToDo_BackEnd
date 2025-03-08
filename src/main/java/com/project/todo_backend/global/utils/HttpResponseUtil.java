@@ -1,4 +1,4 @@
-package com.project.todo_backend.global.security.utils;
+package com.project.todo_backend.global.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.todo_backend.global.apiPayload.ApiResponse;

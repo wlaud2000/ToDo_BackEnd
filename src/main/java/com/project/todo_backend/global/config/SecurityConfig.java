@@ -80,7 +80,7 @@ public class SecurityConfig {
         CustomLoginFilter customLoginFilter = new CustomLoginFilter(
                 authenticationManager(authenticationConfiguration), jwtUtil);
         // Login Filter URL 지정
-        customLoginFilter.setFilterProcessesUrl("/api/users/login/local");
+        customLoginFilter.setFilterProcessesUrl("/api/members/login");
 
         // JwtFilter를 CustomLoginFilter 앞에서 동작하도록 필터 체인에 추가
         http

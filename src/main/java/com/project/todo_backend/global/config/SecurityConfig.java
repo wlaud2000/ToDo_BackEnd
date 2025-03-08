@@ -1,5 +1,9 @@
 package com.project.todo_backend.global.config;
 
+import com.project.todo_backend.domain.member.repository.MemberRepository;
+import com.project.todo_backend.global.security.filter.CustomLoginFilter;
+import com.project.todo_backend.global.security.filter.JwtAuthorizationFilter;
+import com.project.todo_backend.global.security.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +20,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final AuthenticationConfiguration authenticationConfiguration;
+    private final JwtUtil jwtUtil;
+    private final MemberRepository memberRepository;
 
     //인증이 필요하지 않은 url
     private final String[] allowedUrls = {
@@ -67,6 +75,16 @@ public class SecurityConfig {
                         .requestMatchers(allowedUrls).permitAll()
                         .anyRequest().authenticated() // 그 외의 url 들은 인증이 필요함
                 );
+
+        // CustomLoginFilter 인스턴스를 생성하고 필요한 의존성을 주입
+        CustomLoginFilter customLoginFilter = new CustomLoginFilter(
+                authenticationManager(authenticationConfiguration), jwtUtil);
+        // Login Filter URL 지정
+        customLoginFilter.setFilterProcessesUrl("/api/users/login/local");
+
+        // JwtFilter를 CustomLoginFilter 앞에서 동작하도록 필터 체인에 추가
+        http
+                .addFilterBefore(new JwtAuthorizationFilter(jwtUtil, memberRepository), CustomLoginFilter.class);
 
 
         return http.build();

@@ -21,8 +21,8 @@ public class CorsConfig {
         allowedOriginPatterns.add("http://127.0.0.1:8080");
         allowedOriginPatterns.add("http://localhost:3000");
         allowedOriginPatterns.add("http://127.0.0.1:3000");
-        allowedOriginPatterns.add("http://localhost:5500");
-        allowedOriginPatterns.add("http://127.0.0.1:5500");
+        allowedOriginPatterns.add("http://localhost:5173");
+        allowedOriginPatterns.add("http://127.0.0.1:5173");
         allowedOriginPatterns.add("http://localhost:5000");
         allowedOriginPatterns.add("http://127.0.0.1:5000");
 

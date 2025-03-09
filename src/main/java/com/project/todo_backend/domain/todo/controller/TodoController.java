@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +29,14 @@ public class TodoController {
                 .body(ApiResponse.onSuccess(HttpStatus.CREATED, resDTO));
     }
 
-    // 투두 전체 조회
+    // 투두 전체 조회(커서 기반 페이지네이션)
+    @GetMapping("")
+    public ApiResponse<TodoResDTO.TodoResponseListDTO> getTodoList(@CurrentUser AuthUser authUser,
+                                                                   @RequestParam(value = "cursor", required = false) Long cursor,
+                                                                   @RequestParam(value = "offset", defaultValue = "10") int offset) {
+        TodoResDTO.TodoResponseListDTO responseListDTO = todoService.getTodoList(authUser, cursor, offset);
+        return ApiResponse.onSuccess(responseListDTO);
+    }
 
     // 투두 content 수정
 

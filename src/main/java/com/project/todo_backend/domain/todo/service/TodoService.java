@@ -11,7 +11,6 @@ import com.project.todo_backend.domain.todo.entity.Todo;
 import com.project.todo_backend.domain.todo.exception.TodoErrorCode;
 import com.project.todo_backend.domain.todo.exception.TodoException;
 import com.project.todo_backend.domain.todo.repository.TodoRepository;
-import com.project.todo_backend.global.apiPayload.exception.CustomException;
 import com.project.todo_backend.global.security.userdetails.AuthUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

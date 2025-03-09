@@ -5,11 +5,9 @@ import com.project.todo_backend.domain.member.dto.response.MemberResDTO;
 import com.project.todo_backend.domain.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RequiredArgsConstructor
 public class MemberConverter {
 
     public static MemberResDTO.SignUpResponseDTO signUpResponseDTO(Member member) {

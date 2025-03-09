@@ -56,6 +56,11 @@ public class TodoController {
     }
 
     // 투두 삭제
-
+    @DeleteMapping("/{todoId}")
+    public ApiResponse<String> deleteTodo(@CurrentUser AuthUser authUser,
+                                          @PathVariable Long todoId) {
+        todoService.deleteTodo(authUser, todoId);
+        return ApiResponse.onSuccess("Todo 삭제 완료. todoId : " +todoId);
+    }
 
 }

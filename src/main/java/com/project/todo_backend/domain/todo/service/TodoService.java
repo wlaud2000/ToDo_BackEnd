@@ -90,7 +90,11 @@ public class TodoService {
     }
 
     // 투두 삭제
-
+    @Transactional
+    public void deleteTodo(AuthUser authUser, Long todoId) {
+        Todo todo = validateAndGetTodo(authUser, todoId);
+        todoRepository.delete(todo);
+    }
 
     // 공통 메서드
     private Todo validateAndGetTodo(AuthUser authUser, Long todoId) {

@@ -49,7 +49,7 @@ public class Todo {
         updatedAt = LocalDateTime.now();
     }
 
-    public void updateText(String content) {
+    public void updateContent(String content) {
         this.content = content;
     }
 

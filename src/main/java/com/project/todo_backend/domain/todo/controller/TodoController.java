@@ -39,8 +39,21 @@ public class TodoController {
     }
 
     // 투두 content 수정
+    @PatchMapping("/{todoId}")
+    public ApiResponse<TodoResDTO.TodoResponseDTO> modifyTodoContent(@CurrentUser AuthUser authUser,
+                                                              @PathVariable Long todoId,
+                                                              @RequestBody TodoReqDTO.TodoModifyRequestDTO reqDTO) {
+        TodoResDTO.TodoResponseDTO resDTO = todoService.modifyTodoContent(authUser, todoId, reqDTO);
+        return ApiResponse.onSuccess(resDTO);
+    }
 
-    // 투두 상태 수정
+    // 투두 상태 토글 (완료/미완료)
+    @PatchMapping("/{todoId}/toggle")
+    public ApiResponse<TodoResDTO.TodoResponseDTO> toggleTodoStatus(@CurrentUser AuthUser authUser,
+                                                                    @PathVariable Long todoId) {
+        TodoResDTO.TodoResponseDTO responseDTO = todoService.toggleTodoStatus(authUser, todoId);
+        return ApiResponse.onSuccess(responseDTO);
+    }
 
     // 투두 삭제
 

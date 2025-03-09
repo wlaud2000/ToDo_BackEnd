@@ -8,6 +8,8 @@ import com.project.todo_backend.domain.todo.converter.TodoConverter;
 import com.project.todo_backend.domain.todo.dto.request.TodoReqDTO;
 import com.project.todo_backend.domain.todo.dto.response.TodoResDTO;
 import com.project.todo_backend.domain.todo.entity.Todo;
+import com.project.todo_backend.domain.todo.exception.TodoErrorCode;
+import com.project.todo_backend.domain.todo.exception.TodoException;
 import com.project.todo_backend.domain.todo.repository.TodoRepository;
 import com.project.todo_backend.global.apiPayload.exception.CustomException;
 import com.project.todo_backend.global.security.userdetails.AuthUser;
@@ -68,8 +70,40 @@ public class TodoService {
     }
 
     // 투두 content 수정
+    @Transactional
+    public TodoResDTO.TodoResponseDTO modifyTodoContent(AuthUser authUser, Long todoId, TodoReqDTO.TodoModifyRequestDTO reqDTO) {
+        Todo todo = validateAndGetTodo(authUser, todoId);
+        todo.updateContent(reqDTO.content());
+        log.info("todo 내용 수정 완료");
 
-    // 투두 상태 수정
+        return TodoConverter.toTodoResponseDTO(todo);
+    }
+
+    // 투두 상태 토글 (완료/미완료)
+    @Transactional
+    public TodoResDTO.TodoResponseDTO toggleTodoStatus(AuthUser authUser, Long todoId) {
+        Todo todo = validateAndGetTodo(authUser, todoId);
+        todo.toggleCompleted();
+        log.info("todo 토글 수정 완료");
+
+        return TodoConverter.toTodoResponseDTO(todo);
+    }
 
     // 투두 삭제
+
+
+    // 공통 메서드
+    private Todo validateAndGetTodo(AuthUser authUser, Long todoId) {
+        // 1. 사용자 조회
+        Member member = memberRepository.findById(authUser.getUserId())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.USER_NOT_FOUND_404));
+        // 2. Todo조회
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new TodoException(TodoErrorCode.TODO_NOT_FOUND));
+        // 3. 사용자 소유권 확인
+        if (!todo.getMember().getId().equals(member.getId())) {
+            throw new TodoException(TodoErrorCode.UNAUTHORIZED_TODO_ACCESS);
+        }
+        return todo;
+    }
 }

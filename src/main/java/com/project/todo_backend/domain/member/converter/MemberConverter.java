@@ -1,11 +1,15 @@
 package com.project.todo_backend.domain.member.converter;
 
+import com.project.todo_backend.domain.member.dto.request.MemberReqDTO;
 import com.project.todo_backend.domain.member.dto.response.MemberResDTO;
 import com.project.todo_backend.domain.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 public class MemberConverter {
 
     public static MemberResDTO.SignUpResponseDTO signUpResponseDTO(Member member) {
@@ -14,6 +18,15 @@ public class MemberConverter {
                 .memberId(member.getId())
                 .email(member.getEmail())
                 .username(member.getUsername())
+                .build();
+    }
+
+    public static Member toMemberEntity(MemberReqDTO.SignUpRequestDTO reqDTO, PasswordEncoder passwordEncoder) {
+
+        return Member.builder()
+                .email(reqDTO.email())
+                .username(reqDTO.username())
+                .password(passwordEncoder.encode(reqDTO.password()))
                 .build();
     }
 }

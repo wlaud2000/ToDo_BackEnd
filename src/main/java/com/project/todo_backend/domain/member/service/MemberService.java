@@ -32,11 +32,7 @@ public class MemberService {
         }
 
         //DTO 정보 DB 저장
-        Member member = Member.builder()
-                .email(reqDTO.email())
-                .username(reqDTO.username())
-                .password(passwordEncoder.encode(reqDTO.password()))
-                .build();
+        Member member = MemberConverter.toMemberEntity(reqDTO, passwordEncoder);
 
         Member savedMember = memberRepository.save(member);
 

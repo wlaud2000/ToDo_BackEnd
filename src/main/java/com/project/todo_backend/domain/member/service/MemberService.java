@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder; //비밀번호 암호화
 
     //회원가입
+    @Transactional
     public MemberResDTO.SignUpResponseDTO createMember(MemberReqDTO.SignUpRequestDTO reqDTO) {
 
         // 이메일 중복 확인

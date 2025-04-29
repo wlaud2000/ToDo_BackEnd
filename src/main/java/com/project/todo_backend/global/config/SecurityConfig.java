@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -85,8 +86,8 @@ public class SecurityConfig {
 
         // JwtFilter를 CustomLoginFilter 앞에서 동작하도록 필터 체인에 추가
         http
-                .addFilterBefore(new JwtAuthorizationFilter(jwtUtil, memberRepository), CustomLoginFilter.class);
-
+                .addFilterBefore(new JwtAuthorizationFilter(jwtUtil, memberRepository), CustomLoginFilter.class)
+                .addFilterAt(customLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -56,6 +56,41 @@ dependencies {
     // Redis 캐시
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+    // queryDSL
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+}
+
+// Q-Class 생성 경로 설정
+def queryDslSrcDir = file("src/main/generated")
+
+// sourceSets에 QueryDSL 생성 경로 추가
+sourceSets {
+    main {
+        java {
+            srcDirs += queryDslSrcDir
+        }
+    }
+}
+
+// JavaCompile task 설정: Q-Class가 지정한 경로에 생성되도록 설정
+tasks.withType(JavaCompile).configureEach {
+    options.annotationProcessorPath = configurations.annotationProcessor
+}
+
+// clean task 시 QueryDSL 생성 경로 삭제
+clean {
+    delete queryDslSrcDir
+}
+
+// CompileOnly 설정 확장
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 tasks.named('test') {

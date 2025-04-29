@@ -6,6 +6,7 @@ import com.project.todo_backend.domain.todo.service.TodoService;
 import com.project.todo_backend.global.apiPayload.ApiResponse;
 import com.project.todo_backend.global.security.annotation.CurrentUser;
 import com.project.todo_backend.global.security.userdetails.AuthUser;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,25 @@ public class TodoController {
                                           @PathVariable Long todoId) {
         todoService.deleteTodo(authUser, todoId);
         return ApiResponse.onSuccess("Todo 삭제 완료. todoId : " +todoId);
+    }
+
+    // 투두 전체 조회(커서 기반 페이지네이션)
+    @GetMapping("/test")
+    @Operation(description = "test Todo List get")
+    public ApiResponse<TodoResDTO.TodoResponseListDTO> getTodoListTest(@CurrentUser AuthUser authUser,
+                                                                   @RequestParam(value = "cursor", required = false) Long cursor,
+                                                                   @RequestParam(value = "offset", defaultValue = "10") int offset) {
+        TodoResDTO.TodoResponseListDTO responseListDTO = todoService.getTodoListTest(authUser, cursor, offset);
+        return ApiResponse.onSuccess(responseListDTO);
+    }
+
+    @GetMapping("/optimized")
+    public ApiResponse<TodoResDTO.TodoResponseListDTO> getTodoListOptimized(
+            @CurrentUser AuthUser authUser,
+            @RequestParam(value = "cursor", required = false) Long cursor,
+            @RequestParam(value = "offset", defaultValue = "10") int offset) {
+        TodoResDTO.TodoResponseListDTO responseListDTO = todoService.getTodoListOptimized(authUser, cursor, offset);
+        return ApiResponse.onSuccess(responseListDTO);
     }
 
 }

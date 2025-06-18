@@ -4,13 +4,14 @@ import com.project.todo_backend.domain.member.dto.request.MemberReqDTO;
 import com.project.todo_backend.domain.member.dto.response.MemberResDTO;
 import com.project.todo_backend.domain.member.service.MemberService;
 import com.project.todo_backend.global.apiPayload.ApiResponse;
-import com.project.todo_backend.global.security.dto.JwtDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/members")
@@ -27,11 +28,12 @@ public class MemberController {
                 .body(ApiResponse.onSuccess(HttpStatus.CREATED, resDTO));
     }
 
-    @GetMapping("/{memberId}")
-    public ApiResponse<MemberResDTO.MemberDetailResDTO> getMemberInfo(@PathVariable Long memberId) {
-        MemberResDTO.MemberDetailResDTO resDTO = memberService.getMemberInfo(memberId);
-        return ApiResponse.onSuccess(resDTO);
+    @GetMapping("/list")
+    public ApiResponse<MemberResDTO.MemberWithTodoCountListDTO> getAllMembersWithTodoCount() {
+        MemberResDTO.MemberWithTodoCountListDTO members = memberService.getAllMembersWithTodoCount();
+        return ApiResponse.onSuccess(members);
     }
+
 
     //Swagger용 가짜 컨트롤러
     @PostMapping("/login")

@@ -7,6 +7,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberConverter {
 
@@ -28,12 +31,20 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberResDTO.MemberDetailResDTO toMemberDetailResDTO(Member member) {
-        return MemberResDTO.MemberDetailResDTO.builder()
+    public static MemberResDTO.MemberWithTodoCountDTO toMemberWithTodoCountDTO(Member member) {
+        return MemberResDTO.MemberWithTodoCountDTO.builder()
                 .memberId(member.getId())
                 .email(member.getEmail())
                 .username(member.getUsername())
-                .todoNum(member.getTodos().size())
+                .todoCount(member.getTodos().size())
+                .build();
+    }
+
+    public static MemberResDTO.MemberWithTodoCountListDTO toMemberWithTodoCountListDTO(List<Member> members) {
+        return MemberResDTO.MemberWithTodoCountListDTO.builder()
+                .memberWithTodoCountListDTO(members.stream()
+                        .map(MemberConverter::toMemberWithTodoCountDTO)
+                        .toList())
                 .build();
     }
 }

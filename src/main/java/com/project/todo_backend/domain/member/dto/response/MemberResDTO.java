@@ -2,6 +2,8 @@ package com.project.todo_backend.domain.member.dto.response;
 
 import lombok.Builder;
 
+import java.util.List;
+
 public class MemberResDTO {
 
     @Builder
@@ -13,11 +15,17 @@ public class MemberResDTO {
     }
 
     @Builder
-    public record MemberDetailResDTO(
+    public record MemberWithTodoCountDTO(
             Long memberId,
             String email,
             String username,
-            Integer todoNum
+            Integer todoCount
     ) {
+    }
+
+    @Builder
+    public record MemberWithTodoCountListDTO(
+            List<MemberWithTodoCountDTO> memberWithTodoCountListDTO
+    ){
     }
 }

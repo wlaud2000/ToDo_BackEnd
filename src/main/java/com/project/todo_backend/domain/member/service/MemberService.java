@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -39,10 +41,9 @@ public class MemberService {
         return MemberConverter.signUpResponseDTO(savedMember);
     }
 
-    public MemberResDTO.MemberDetailResDTO getMemberInfo(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(()-> new MemberException(MemberErrorCode.USER_NOT_FOUND_404));
-
-        return MemberConverter.toMemberDetailResDTO(member);
+    @Transactional(readOnly = true)
+    public MemberResDTO.MemberWithTodoCountListDTO getAllMembersWithTodoCount() {
+        List<Member> members = memberRepository.findAll();
+        return MemberConverter.toMemberWithTodoCountListDTO(members);
     }
 }

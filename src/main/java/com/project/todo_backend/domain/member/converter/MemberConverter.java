@@ -27,4 +27,13 @@ public class MemberConverter {
                 .password(passwordEncoder.encode(reqDTO.password()))
                 .build();
     }
+
+    public static MemberResDTO.MemberDetailResDTO toMemberDetailResDTO(Member member) {
+        return MemberResDTO.MemberDetailResDTO.builder()
+                .memberId(member.getId())
+                .email(member.getEmail())
+                .username(member.getUsername())
+                .todoNum(member.getTodos().size())
+                .build();
+    }
 }

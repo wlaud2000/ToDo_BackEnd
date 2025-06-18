@@ -1,7 +1,11 @@
 package com.project.todo_backend.domain.member.entity;
 
+import com.project.todo_backend.domain.todo.entity.Todo;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "members")
@@ -23,4 +27,7 @@ public class Member {
 
     @Column(name = "username", nullable = false)
     private String username;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Todo> todos = new ArrayList<>();
 }

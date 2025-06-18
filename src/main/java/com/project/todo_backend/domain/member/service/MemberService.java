@@ -38,4 +38,11 @@ public class MemberService {
 
         return MemberConverter.signUpResponseDTO(savedMember);
     }
+
+    public MemberResDTO.MemberDetailResDTO getMemberInfo(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()-> new MemberException(MemberErrorCode.USER_NOT_FOUND_404));
+
+        return MemberConverter.toMemberDetailResDTO(member);
+    }
 }

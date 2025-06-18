@@ -11,4 +11,13 @@ public class MemberResDTO {
             String username
     ){
     }
+
+    @Builder
+    public record MemberDetailResDTO(
+            Long memberId,
+            String email,
+            String username,
+            Integer todoNum
+    ) {
+    }
 }

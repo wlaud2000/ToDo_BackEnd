@@ -47,4 +47,20 @@ public class MemberConverter {
                         .toList())
                 .build();
     }
+
+    public static MemberResDTO.MemberWithTodoCountDTO2 toMemberWithTodoCountDTO2(Member member) {
+        return MemberResDTO.MemberWithTodoCountDTO2.builder()
+                .memberId(member.getId())
+                .email(member.getEmail())
+                .username(member.getUsername())
+                .build();
+    }
+
+    public static MemberResDTO.MemberWithTodoCountListDTO2 toMemberWithTodoCountListDTO2 (List<Member> members) {
+        return MemberResDTO.MemberWithTodoCountListDTO2.builder()
+                .memberWithTodoCountListDTO(members.stream()
+                        .map(MemberConverter::toMemberWithTodoCountDTO2)
+                        .toList())
+                .build();
+    }
 }

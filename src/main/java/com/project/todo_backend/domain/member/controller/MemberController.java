@@ -30,7 +30,15 @@ public class MemberController {
 
     @GetMapping("/list")
     public ApiResponse<MemberResDTO.MemberWithTodoCountListDTO> getAllMembersWithTodoCount() {
+        log.info("N+1 문제 발생 API");
         MemberResDTO.MemberWithTodoCountListDTO members = memberService.getAllMembersWithTodoCount();
+        return ApiResponse.onSuccess(members);
+    }
+
+    @GetMapping("/list2")
+    public ApiResponse<MemberResDTO.MemberWithTodoCountListDTO2> getAllMembersWithTodoCount2() {
+        log.info("LAZY 로딩에서 연관된 Entity를 가져오지 않으면?");
+        MemberResDTO.MemberWithTodoCountListDTO2 members = memberService.getAllMembersWithTodoCount2();
         return ApiResponse.onSuccess(members);
     }
 

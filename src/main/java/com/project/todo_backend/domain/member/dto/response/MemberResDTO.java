@@ -28,4 +28,20 @@ public class MemberResDTO {
             List<MemberWithTodoCountDTO> memberWithTodoCountListDTO
     ){
     }
+
+    @Builder
+    public record MemberWithTodoCountDTO2(
+            Long memberId,
+            String email,
+            String username
+    ) {
+    }
+
+    @Builder
+    public record MemberWithTodoCountListDTO2(
+            List<MemberWithTodoCountDTO2> memberWithTodoCountListDTO
+    ){
+    }
+
+
 }

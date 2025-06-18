@@ -46,4 +46,10 @@ public class MemberService {
         List<Member> members = memberRepository.findAll();
         return MemberConverter.toMemberWithTodoCountListDTO(members);
     }
+
+    @Transactional(readOnly = true)
+    public MemberResDTO.MemberWithTodoCountListDTO2 getAllMembersWithTodoCount2() {
+        List<Member> members = memberRepository.findAll();
+        return MemberConverter.toMemberWithTodoCountListDTO2(members);
+    }
 }

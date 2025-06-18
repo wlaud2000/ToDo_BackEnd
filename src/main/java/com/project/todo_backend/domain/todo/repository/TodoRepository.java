@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TodoRepository extends JpaRepository<Todo, Long>, TodoRepositoryCustom {
+public interface TodoRepository extends JpaRepository<Todo, Long> {
     // ID 기준 내림차순 정렬, 특정 회원의 Todo조회 (첫 페이지)
     Slice<Todo> findByMemberOrderByIdDesc(Member member, Pageable pageable);
 

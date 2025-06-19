@@ -2,7 +2,12 @@ package com.project.todo_backend.domain.member.controller;
 
 import com.project.todo_backend.domain.member.dto.request.MemberReqDTO;
 import com.project.todo_backend.domain.member.dto.response.MemberResDTO;
+import com.project.todo_backend.domain.member.repository.MemberRepository;
 import com.project.todo_backend.domain.member.service.MemberService;
+import com.project.todo_backend.domain.todo.entity.Todo;
+import com.project.todo_backend.domain.todo.exception.TodoErrorCode;
+import com.project.todo_backend.domain.todo.exception.TodoException;
+import com.project.todo_backend.domain.todo.repository.TodoRepository;
 import com.project.todo_backend.global.apiPayload.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final TodoRepository todoRepository;
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<MemberResDTO.SignUpResponseDTO>> signUp(@RequestBody @Valid MemberReqDTO.SignUpRequestDTO reqDTO) {
@@ -30,16 +34,22 @@ public class MemberController {
 
     @GetMapping("/list")
     public ApiResponse<MemberResDTO.MemberWithTodoCountListDTO> getAllMembersWithTodoCount() {
-        log.info("N+1 문제 발생 API");
+        log.info("N+1 문제 발생 API - 연관된 Entity를 가져오면?");
         MemberResDTO.MemberWithTodoCountListDTO members = memberService.getAllMembersWithTodoCount();
         return ApiResponse.onSuccess(members);
     }
 
     @GetMapping("/list2")
     public ApiResponse<MemberResDTO.MemberWithTodoCountListDTO2> getAllMembersWithTodoCount2() {
-        log.info("LAZY 로딩에서 연관된 Entity를 가져오지 않으면?");
+        log.info("N+1 문제 발생 API - 연관된 Entity를 가져오지 않으면?");
         MemberResDTO.MemberWithTodoCountListDTO2 members = memberService.getAllMembersWithTodoCount2();
         return ApiResponse.onSuccess(members);
+    }
+
+    @GetMapping("/test1")
+    public void test1() {
+        Todo todo = todoRepository.findById(1L).orElseThrow(() -> new TodoException(TodoErrorCode.TODO_NOT_FOUND));
+        String name = todo.getMember().getUsername();
     }
 
 

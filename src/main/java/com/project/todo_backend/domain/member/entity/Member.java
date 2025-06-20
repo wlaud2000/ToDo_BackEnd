@@ -1,5 +1,6 @@
 package com.project.todo_backend.domain.member.entity;
 
+import com.project.todo_backend.domain.comment.entity.Comment;
 import com.project.todo_backend.domain.todo.entity.Todo;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +29,9 @@ public class Member {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Todo> todos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 }

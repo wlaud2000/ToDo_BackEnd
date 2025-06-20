@@ -52,4 +52,22 @@ public class MemberService {
         List<Member> members = memberRepository.findAll();
         return MemberConverter.toMemberWithTodoCountListDTO2(members);
     }
+
+    @Transactional(readOnly = true)
+    public List<Member> getMembersWithTodosAndComments() {
+
+        // 1단계: Member와 Todos 조회
+        List<Member> members = memberRepository.findAllWithTodos();
+
+        // 2단계: 조회된 Member들의 ID로 Comments 조회
+        List<Long> memberIds = members.stream()
+                .map(Member::getId)
+                .toList();
+
+        List<Member> membersWithComments = memberRepository
+                .findMembersWithComments(memberIds);
+
+        // 3단계: 결과 병합 (JPA가 영속성 컨텍스트에서 자동으로 병합)
+        return members;
+    }
 }

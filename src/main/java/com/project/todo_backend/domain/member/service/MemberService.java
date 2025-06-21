@@ -10,6 +10,9 @@ import com.project.todo_backend.domain.member.repository.MemberRepository;
 import com.project.todo_backend.global.apiPayload.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,5 +72,15 @@ public class MemberService {
 
         // 3단계: 결과 병합 (JPA가 영속성 컨텍스트에서 자동으로 병합)
         return members;
+    }
+
+    @Transactional(readOnly = true)
+    public void getMembersWithPaging() {
+
+        // 10개만 조회하려고 함
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // 실제로는 모든 데이터를 메모리에 로드!
+        Page<Member> members = memberRepository.findAllWithTodosPageable(pageable);
     }
 }

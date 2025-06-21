@@ -1,6 +1,8 @@
 package com.project.todo_backend.domain.member.repository;
 
 import com.project.todo_backend.domain.member.entity.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,4 +46,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "LEFT JOIN FETCH m.comments " +
             "WHERE m.id IN :memberIds")
     List<Member> findMembersWithComments(@Param("memberIds") List<Long> memberIds);
+
+    // ------------------------------------------------------------------------------------------
+
+    // 잘못된 방법 - 페이징 + Fetch Join
+    @Query("SELECT m FROM Member m LEFT JOIN FETCH m.todos")
+    Page<Member> findAllWithTodosPageable(Pageable pageable);
 }

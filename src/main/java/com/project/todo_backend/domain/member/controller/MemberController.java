@@ -111,6 +111,11 @@ public class MemberController {
         }
     }
 
+    @GetMapping("/testOOM1")
+    public void testOOM() {
+        memberService.getMembersWithPaging();
+    }
+
 
     //Swagger용 가짜 컨트롤러
     @PostMapping("/login")

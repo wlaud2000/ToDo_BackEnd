@@ -28,8 +28,6 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
-    private final TodoRepository todoRepository;
-    private final MemberRepository memberRepository;
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<MemberResDTO.SignUpResponseDTO>> signUp(@RequestBody @Valid MemberReqDTO.SignUpRequestDTO reqDTO) {
@@ -51,71 +49,6 @@ public class MemberController {
         MemberResDTO.MemberWithTodoCountListDTO2 members = memberService.getAllMembersWithTodoCount2();
         return ApiResponse.onSuccess(members);
     }
-
-    @GetMapping("/members-lazy")
-    public void getMembersLazy() {
-        List<Member> members = memberRepository.findAll();
-
-        for (Member member : members) {
-            System.out.println("회원: " + member.getUsername());
-            System.out.println("할일 개수: " + member.getTodos().size()); // 여기서 N번의 추가 쿼리
-        }
-    }
-
-    @GetMapping("/test-comprehensive")
-    public void testComprehensive() {
-        System.out.println("=== 1. DISTINCT 없음 (INNER JOIN) ===");
-        List<Member> noDistinct = memberRepository.findAllWithTodosNoDistinct();
-        analyzeResults("NoDistinct", noDistinct);
-
-        System.out.println("\n=== 2. DISTINCT 있음 (INNER JOIN) ===");
-        List<Member> withDistinct = memberRepository.findAllWithTodosWithDistinct();
-        analyzeResults("WithDistinct", withDistinct);
-
-        System.out.println("\n=== 3. LEFT JOIN (모든 Member 포함) ===");
-        List<Member> leftJoin = memberRepository.findAllWithTodosLeftJoin();
-        analyzeResults("LeftJoin", leftJoin);
-    }
-
-    @GetMapping("/test-left-join")
-    public void testLeftJoin() {
-        List<Member> members = memberRepository.findAllWithTodosIncludeEmpty();
-
-        System.out.println("조회된 Member 수: " + members.size());
-
-        for (Member member : members) {
-            System.out.println("Member: " + member.getUsername() +
-                    ", Todo 개수: " + member.getTodos().size());
-        }
-    }
-
-    @GetMapping("/test-multiple-bag")
-    public void testMultipleBag() {
-        try {
-            List<Member> members = memberRepository.findAllWithTodosAndComments();
-        } catch (Exception e) {
-            System.out.println("예외 발생: " + e.getMessage());
-            // org.hibernate.loader.MultipleBagFetchException:
-            // cannot simultaneously fetch multiple bags
-        }
-    }
-
-    @GetMapping("/test--multiple-bag-sol1")
-    public void testMultipleBag1() {
-        try {
-            List<Member> members = memberService.getMembersWithTodosAndComments();
-        } catch (Exception e) {
-            System.out.println("예외 발생: " + e.getMessage());
-            // org.hibernate.loader.MultipleBagFetchException:
-            // cannot simultaneously fetch multiple bags
-        }
-    }
-
-    @GetMapping("/testOOM1")
-    public void testOOM() {
-        memberService.getMembersWithPaging();
-    }
-
 
     //Swagger용 가짜 컨트롤러
     @PostMapping("/login")

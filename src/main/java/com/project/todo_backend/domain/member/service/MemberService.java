@@ -10,9 +10,7 @@ import com.project.todo_backend.domain.member.repository.MemberRepository;
 import com.project.todo_backend.global.apiPayload.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,5 +80,18 @@ public class MemberService {
 
         // 실제로는 모든 데이터를 메모리에 로드!
         Page<Member> members = memberRepository.findAllWithTodosPageable(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public void getMembersWithPagingOptimized() {
+
+        Pageable pageable = PageRequest.of(0, 10);
+
+        // 1단계: Member ID만 페이징으로 조회 (빠름!)
+        Slice<Long> memberIdSlice = memberRepository.findMemberIds(pageable);
+
+        // 2단계: 해당 Member들의 Todo만 조회 (정확한 양만!)
+        List<Member> members = memberRepository.findMembersWithTodosByIds(memberIdSlice.getContent());
+
     }
 }

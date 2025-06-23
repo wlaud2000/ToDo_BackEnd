@@ -3,6 +3,7 @@ package com.project.todo_backend.domain.member.repository;
 import com.project.todo_backend.domain.member.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,10 +26,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findAllWithTodosWithDistinct();
 
     // LEFT JOIN으로 test3도 포함
-    @Query("SELECT DISTINCT m FROM Member m LEFT JOIN FETCH m.todos")
+    @Query("SELECT m FROM Member m LEFT JOIN FETCH m.todos")
     List<Member> findAllWithTodosLeftJoin();
 
-    @Query("SELECT DISTINCT m FROM Member m LEFT JOIN FETCH m.todos")
+    @Query("SELECT m FROM Member m LEFT JOIN FETCH m.todos")
     List<Member> findAllWithTodosIncludeEmpty();
 
     @Query("SELECT m FROM Member m " +
@@ -52,4 +53,14 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     // 잘못된 방법 - 페이징 + Fetch Join
     @Query("SELECT m FROM Member m LEFT JOIN FETCH m.todos")
     Page<Member> findAllWithTodosPageable(Pageable pageable);
+
+    // ------------------------------------------------------------------------------------------
+
+    // 1단계: Member ID만 페이징으로 조회
+    @Query("SELECT m.id FROM Member m ORDER BY m.id")
+    Slice<Long> findMemberIds(Pageable pageable);
+
+    // 2단계: 특정 Member들의 Todo 조회
+    @Query("SELECT m FROM Member m LEFT JOIN FETCH m.todos WHERE m.id IN :memberIds")
+    List<Member> findMembersWithTodosByIds(@Param("memberIds") List<Long> memberIds);
 }
